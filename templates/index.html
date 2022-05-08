@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <link rel="icon" href="#">
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ 
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    
+    <script>  
+       function cambiochat(emisor){
+      
+        
+
+       
+         console.log(emisor);
+
+
+
+         console.log("seviene");
+       
+         var d = document.querySelector('#lonecesito');
+
+        
+         console.log(d);
+         var f = d.childNodes;
+         console.log("el de abajo es f");
+         console.log(f);
+         for( i = 0 , j = f.length; i < j ; i++ ){
+
+             if(f[i] !== undefined){
+                if( f[i].className ==emisor){
+                  //console.log("PORFIN");
+                }
+                else{
+                  var hola = f[i].className;
+                  if(hola!==undefined ){
+                    $("div."+hola).hide();
+                    $("."+hola).hide();
+                  }
+                  else{
+                    console.log("indefinido")
+                  }
+
+                }
+            }
+              else{
+                console.log("indefinido");
+             }
+
+          };
+
+        $("."+emisor).show();
+    
+    }
+        $(document).ready(function() {
+            $("#Aparecer").hide();
+
+    
+    
+          
+            
+        });
+</script>
+    <!-- Bootstrap CSS -->
+  </head>
+
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <img
+      class="hola"
+      src="{{ url_for('static', filename='img/dos.png') }}"
+      style="width: 2%; margin-right: 20px;"
+    />
+    <a class="navbar-brand" href="/">MiniMensajes</a>
+    <a id ="Usuario" class="navbar-brand"></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarTogglerDemo02"
+      aria-controls="navbarTogglerDemo02"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item active"></li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <ul class="navbar-nav"></ul>
+      </form>
+    </div>
+  </nav>
+
+  <div class="container pt-4 pb-4" style="padding-bottom: 6rem !important;">
+    {% block content %}{% endblock %}
+  </div>
+{{users}}
+  <body data-spy="scroll">
+
+    <!-- Empieza parte login-->
+    <div class="container"  id="Desaparecer">
+      <div
+        class="row"
+        style="margin-right: 20px; "
+       
+      >
+        <div class="col-md-4 offset-md-4">
+          <div class="card mt-4 text-center">
+            <div class="card-header">
+              <h3>Iniciar Sesión</h3>
+            </div>
+
+            <div class="card-body">
+            
+        
+              <div class="col-md-12">
+                <div class="thumbnail">
+                  <img
+                    align="middle"
+                    class="hola"
+                    src="{{ url_for('static', filename='img/login.png') }}"
+                    style="height: 50%; width: 50%;"
+                  />
+                </div>
+              </div>
+              <br />
+              <div class="form-group">
+                <h2>Ingrese su Alias</h2>
+                <br /><br />
+                <input
+                  type="text"
+                  id="username"
+                  class="form-control"
+                  placeholder="Ejemplo: Javiwi"
+                />
+                <div class="error" > </div>
+                <br />
+                <button
+                  id="send_username"
+                
+                  class="btn btn-primary btn-block mt-4"
+                >
+                  Entrar!
+                </button>
+            
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h1 id="oculto" style="display:none; visibility: hidden;"></h1>
+    <!-- Comienza la parte del chat-->
+    <div class="container horizontal-scrollable" id ="Aparecer">
+      <div class="row">
+        <div class="col-sm" >
+            <b
+              >Envia tus mensajes aqui abajo!!
+              <span class="glyphicon glyphicon-arrow-down"></span
+            ></b>
+            <div class="clearfix" style="margin-top: 5px;"></div>
+  
+            Mensaje privado a:
+            <div style="padding-top: 5px;"></div>
+            <input
+              type="text"
+              class="username form-control"
+              id="send_to_username"
+              placeholder="Ingrese Alias"
+            />
+            <div style="padding-top: 5px;"></div>
+            Mensaje:
+            <div style="padding-top: 5px;"></div>
+            <input
+              type="text"
+              class="message form-control"
+              id="private_message"
+              placeholder="Ingrese su mensaje"
+            />
+            <div style="padding-top: 5px;"></div>
+  
+            <button
+              id="send_private_message"
+              class="btn btn-outline-success btn-block"
+
+            >
+              <span class="glyphicon glyphicon-send"></span>Send
+            </button>
+            <div style="padding-top: 5px;"></div>
+            <!--
+            Mensaje al lobby:
+            <div style="padding-top: 5px;"></div>
+            <input
+              type="text"
+              class="message form-control"
+              id="message"
+              placeholder="Ingrese su mensaje"
+            />
+            <div style="padding-top: 5px;"></div>
+            <button id="send" class="btn btn-outline-success btn-block">
+              Enviar
+            </button> -->
+           
+            <div style="padding-top: 5px;"></div>
+             Terminar conexión con :
+            <input
+              type="text"
+              class="username form-control"
+              id="terminarconversacion1"
+              placeholder="Ingrese Alias"
+            />
+            <div style="padding-top: 5px;"></div>
+             <button id="terminarconversacion" class="btn btn-outline-success btn-block"> 
+             Enviar 
+             </button>
+
+          </div>
+    
+        <!--Mensajes-->
+        <div class="col-sm" style="background-color:ghostwhite; height:600px; width:520px;" id="chat">
+             
+              <div class="row" style=" width:520px;">
+                <div class ="col-sm">
+             
+                  <div class="message_holder" id="lonecesito" style="height:595px; overflow:scroll;overflow-y:scroll;overflow-x:hidden; ">
+                    <h1 style="color: #ccc; " id='Mensajes'>No hay mensajes todavia</h1>
+                  </div>
+                  
+                </div>
+         
+                
+              </div>
+          
+              
+        
+        </div>
+
+
+        <div class="col-sm" id=emi tyle="background-color:ghostwhite; height:600px;">
+         
+          <div class="row" >
+            <div class ="col-sm" style="padding:20px;" >
+             
+              <div class="emisores"  style="height:595px; overflow:scroll;overflow-y:scroll;overflow-x:hidden;" >
+                <h4 style="text-align:center">Usuarios que te contactaron o contactaste,presione en uno de ellos para ver sus mensajes</h4>
+                <br><br><br>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>
+     
+  
+      </div>
+    </div>
+    <div>
+      <!--<div id="a"  style="height:595px; overflow:scroll;overflow-y:scroll;overflow-x:hidden; >-->
+<script>
+
+  
+</script>
+      <br />
+      <br />
+      <br />
+    </div>
+  </body>
+
+  <div>
+    <footer class="fixed-bottom bg-dark page-footer">
+      <h6></h6>
+      <!-- Copyright -->
+      <div class="footer-copyright text-center text-light">
+        <p href="https://mdbootstrap.com/">
+          "Con los mensajes se pueden estrechar los lazos a la distancia"
+          -StivJovzx. © 2020 Copyright
+        </p>
+      </div>
+      <!-- Copyright -->
+    </footer>
+  </div>
+</html>
